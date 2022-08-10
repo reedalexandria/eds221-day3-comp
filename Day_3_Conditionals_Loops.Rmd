@@ -1,0 +1,68 @@
+---
+title: "Day 3 - Conditionals & Loops"
+author: "Alex Reed"
+date: "2022-08-10"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+library(tidyverse)
+```
+
+### `if` statement
+
+```{r}
+burrito <- 2.4
+
+if (burrito > 2) {
+  print("I love burritos!")
+}
+```
+
+# Example with string
+
+```{r}
+my_ships <- c("Millenium Falcon", "X-wing", "Tie-Fighter", "Death Star")
+
+str_detect(my_ships, pattern = "r")
+
+# does the string vector contain an r. This is case sensitive (wouldn't capture R)
+
+phrase <- "I love burritos"
+
+if (str_detect(phrase, pattern = "love")) {
+  print("I am a burrito fan.")
+}
+```
+
+# `if-else` statement 
+
+```{r}
+pika <- 89.1
+
+if (pika > 60) {
+  print("mega pika")
+} else {
+  print("normal pika")
+}
+```
+
+# Example of an %in% operator
+```{r}
+# |> = %>% = and then  
+# filter function is a part of dplyr
+
+tatooine_characters <- starwars |> 
+  filter(homeworld == "Tatooine") 
+
+# Use %in% operator to check for multiple positive matches
+
+tatooine_endor_naboo <- starwars |> 
+  filter(homeworld %in% c("Tatooine", "Naboo", "Endor"))
+
+#In words: Does the value in the homeworld variable for that row exist IN that vector c("Tatooine", "Naboo", "Endor")
+
+```
+
