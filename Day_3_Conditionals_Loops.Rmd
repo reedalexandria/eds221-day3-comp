@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 library(tidyverse)
+library(palmerpenguins)
 ```
 
 ### `if` statement
@@ -64,5 +65,102 @@ tatooine_endor_naboo <- starwars |>
 
 #In words: Does the value in the homeworld variable for that row exist IN that vector c("Tatooine", "Naboo", "Endor")
 
+```
+
+`### `group_by() %>% summarize()`
+
+```{r}
+penguins |> 
+  group_by(species, island) |>
+  summarize(mean_bill_length = mean(bill_length_mm, na.rm = TRUE),
+            sd_bill_length = sd(bill_length_mm, na.rm = TRUE),
+            n = n())
+
+# 1. Find the mean and sd of character height in 'starwars' grouped by homeworld
+
+starwars |> 
+  group_by(homeworld) |> 
+  summarize(mean_height = mean(height, na.rm = TRUE),
+            sd_height = sd(height, na.rm = TRUE),
+            n = n())
+
+# 2. Find the maximum, minimum flipper length, and sample size, for each species of penguins 
+penguins |> 
+  group_by(species, sex) |> 
+  summarize(max_flipper_length = max(flipper_length_mm, na.rm = TRUE),
+            min_flipper_length = min(flipper_length_mm, na.rm = TRUE),
+            sample_size = n())
+
+# Across example. Nested for loop. Able to iterate in multiple directions
+penguins |> 
+  group_by(species) |> 
+  summarize(across(where(is.numeric), mean, na.rm = TRUE))
+```
+
+### For Loop
+
+```{r}
+tree_height <- c(1, 2, 6, 10, 14, 20)
+
+for (i in seq_along(tree_height)) {
+  val = tree_height[i] + tree_height[i + 1]
+  print(val)
+}
+```
+
+### For loop with conditional statements
+
+```{r}
+#Create empty vector animal_ages
+
+animal_ages <- vector(mode = "numeric", length = length(species))
+
+species <- c("dog", "elephant", "goat", "dog", "dog", "elephant")
+
+age_human <- c(3, 8, 4, 6, 12, 18)
+
+for (i in seq_along(species)) {
+  if (species[i] == "dog") {
+    animal_age <- age_human[i] * 7 
+  } else if (species[i] == "elephant") {
+    animal_age <- age_human[i] * 0.88 
+  } else if (species[i] == "goat") {
+    animal_age <- age_human[i] * 4.7
+  }
+  animal_ages[i] <- animal_age
+} 
+
+```
+
+### FOr loops across data frames
+
+```{r}
+# Storage vector
+mean_mtcars <- vector(mode = "numeric", length = ncol(mtcars))
+
+#Writing the loop
+
+for (i in seq_along(mtcars)) {
+  mean_val <- mean(mtcars[[i]], na.rm = TRUE)
+  mean_mtcars[[i]] <- mean_val
+}
+
+mean_mtcars
+```
+
+### Functional programming examples
+
+Adding syntactic sugar (apply, across, map_df)
+
+```{r}
+apply(X= mtcars, MARGIN =2, FUN = mean)
+```
+
+```{r}
+#{purrr}
+map(.x = mtcars, .f = mean)
+
+#to return output in a data frame (instead of a list)
+map_df(.x = mtcars, .f = mean)
 ```
 
